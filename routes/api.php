@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\API\V1\AuthController;
+use App\Http\Controllers\API\V1\TaskController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -16,4 +19,18 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::controller(AuthController::class)->group(function () {
+    Route::post('login', 'login');
+    Route::post('register', 'register');
+    Route::post('logout', 'logout');
+    Route::post('refresh', 'refresh');
+});
+
+
+//api/v1
+
+Route::group(['prefix'=> 'v1', 'namespace' => 'App\Http\Controllers\API\V1'], function () {
+    Route::apiResource('task',TaskController::class);
 });
