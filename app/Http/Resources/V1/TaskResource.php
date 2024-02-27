@@ -16,7 +16,9 @@ class TaskResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'name' => $this->name,
             'status' => $this->status,
+            
             'createdAt' => $this->created_at,
             'userName' => $this->user->name,
         ];

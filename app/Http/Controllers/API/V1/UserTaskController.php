@@ -8,17 +8,20 @@ use App\Http\Requests\UpdateTaskRequest;
 use App\Http\Resources\V1\TaskCollection;
 use App\Http\Resources\V1\TaskResource;
 use App\Models\Task;
+use Illuminate\Support\Facades\Auth;
 
-class TaskController extends Controller
+class UserTaskController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-
+    
     public function index()
     {
         //
-        return new TaskCollection(Task::paginate());
+        $user = Auth::user();
+        dd($user);
+        return new TaskCollection($user->task->paginate(10));
     }
 
 
@@ -27,8 +30,10 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
-        //        
-        $task = Task::create($request->validated());
+        $user = Auth::user();
+        $task = $user->task->create($request->validated());
+
+        return new TaskResource($task);
     }
 
     /**
@@ -42,33 +47,20 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      */
-
+    
     public function update(UpdateTaskRequest $request, Task $task)
     {
-        $task = Task::findOrFail($task->id);
         $task->update($request->validated());
-        return response()->json([
-            "message"=> "success",
-            "message"=> "task updated successfully",
-            "task" => $task,
-        ]);
+        return new TaskResource($task);
     }
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Task $task)
     {
-        if ($task) {
-            $task->delete();
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Task deleted successfully',
-                'task' => new TaskResource($task),
-            ]);
-        }
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Task not found!',
-        ], 404);
+        //
+        $task->delete();
+        return response()->json(['message' => 'Task deleted successfully']);
     }
 }

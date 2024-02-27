@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\V1\AuthController;
 use App\Http\Controllers\API\V1\TaskController;
+use App\Http\Controllers\API\V1\UserTaskController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,4 +34,6 @@ Route::controller(AuthController::class)->group(function () {
 
 Route::group(['prefix'=> 'v1', 'namespace' => 'App\Http\Controllers\API\V1'], function () {
     Route::apiResource('task',TaskController::class);
+    // Route::apiResource('usertask', UserTaskController::class);
 });
+
