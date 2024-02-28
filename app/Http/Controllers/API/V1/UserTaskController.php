@@ -8,6 +8,8 @@ use App\Http\Requests\UpdateTaskRequest;
 use App\Http\Resources\V1\TaskCollection;
 use App\Http\Resources\V1\TaskResource;
 use App\Models\Task;
+use Illuminate\Http\Request as HttpRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class UserTaskController extends Controller
@@ -30,8 +32,9 @@ class UserTaskController extends Controller
 
     public function index()
     {
-        $user = Auth::user();
-        return new TaskCollection($user->task->paginate(10));
+        $user = auth()->user();
+        $tasks = TaskResource::collection($user->tasks);
+        return response()->json(['data' => $tasks], 201);
     }
 
 
@@ -55,12 +58,31 @@ class UserTaskController extends Controller
      * )
      */
 
-    public function store(StoreTaskRequest $request)
+    public function store(Request $request)
     {
         $user = Auth::user();
-        $task = $user->task->create($request->validated());
+        $request->validate([
+            "name" => "required|string",
+            "status" => ["required", "string", "in:to do,doing,done"],
+        ]);
+        $task = $request->user()->tasks()->create([
+            'name' => $request->name,
+            'status' => $request->status,
+        ]);
 
-        return new TaskResource($task);
+        $task = new TaskResource($task);
+        if ($task) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Task created successfully',
+                'task' => $task,
+            ], 201);
+        }
+
+        return response()->json([
+            'error' => 'error',
+            'message' => 'Error withing creating the task',
+        ], 400);
     }
 
 
@@ -86,15 +108,16 @@ class UserTaskController extends Controller
      * )
      */
 
-    public function show(Task $task)
+    public function show($id)
     {
         $user = Auth::user();
+        $task = Task::findOrfail($id);
         if ($user->id !== $task->user_id) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
-
         return new TaskResource($task);
     }
+
 
 
     /**
@@ -121,13 +144,12 @@ class UserTaskController extends Controller
      * )
      */
 
-    public function update(UpdateTaskRequest $request, Task $task)
+    public function update(UpdateTaskRequest $request, $id)
     {
-        $user = Auth::user();
-        if ($user->id !== $task->user_id) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
+        $user = Auth()->user();
+        $task = Task::findOrfail($id);
 
+        $this->authorize('update', $task);
         $task->update($request->validated());
         return new TaskResource($task);
     }
@@ -152,9 +174,11 @@ class UserTaskController extends Controller
      * )
      */
 
-    public function destroy(Task $task)
+    public function destroy($id)
     {
+        $this->authorize('delete', $task = Task::findOrfail($id));
         $user = Auth::user();
+        $task = Task::findOrfail($id);
         if ($user->id !== $task->user_id) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }

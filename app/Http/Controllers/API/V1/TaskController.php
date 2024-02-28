@@ -125,22 +125,22 @@ class TaskController extends Controller
     }
 
     /**
-     * @OA\Delete(
-     *     path="/api/v1/task/{taskId}",
-     *     summary="Delete a specific task",
-     *     tags={"Tasks"},
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(
-     *         name="taskId",
-     *         in="path",
-     *         required=true,
-     *         @OA\Schema(type="integer"),
-     *         description="ID of the task to delete"
-     *     ),
-     *     @OA\Response(response="200", description="Task deleted successfully"),
-     *     @OA\Response(response="404", description="Task not found")
-     * )
-     */
+ * @OA\Delete(
+ *     path="/api/v1/task/{taskId}",
+ *     summary="Delete a specific task",
+ *     tags={"Tasks"},
+ *     security={{"bearerAuth":{}}},
+ *     @OA\Parameter(
+ *         name="taskId",
+ *         in="path",
+ *         required=true,
+ *         @OA\Schema(type="integer"),
+ *         description="ID of the task to delete"
+ *     ),
+ *     @OA\Response(response="200", description="Task deleted successfully"),
+ *     @OA\Response(response="404", description="Task not found")
+ * )
+ */
 
     public function destroy(Task $task)
     {

@@ -24,7 +24,6 @@ class UpdateTaskRequest extends FormRequest
         return [
             "name" => "sometimes|required|string",
             "status" => ["sometimes", "required", "string", "in:to do,doing,done"],
-            "user_id" => "sometimes|required|integer",
         ];
     }
 }
