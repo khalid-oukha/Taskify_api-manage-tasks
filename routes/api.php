@@ -34,6 +34,6 @@ Route::controller(AuthController::class)->group(function () {
 
 Route::group(['prefix'=> 'v1', 'namespace' => 'App\Http\Controllers\API\V1'], function () {
     Route::apiResource('task',TaskController::class);
-    // Route::apiResource('usertask', UserTaskController::class);
+    Route::apiResource('usertask', UserTaskController::class);
 });
 
