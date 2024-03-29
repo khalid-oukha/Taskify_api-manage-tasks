@@ -34,7 +34,7 @@ class UserTaskController extends Controller
     {
         $user = auth()->user();
         $tasks = TaskResource::collection($user->tasks);
-        return response()->json(['data' => $tasks], 201);
+        return response()->json(['data' => $tasks], 200);
     }
 
 
@@ -185,5 +185,18 @@ class UserTaskController extends Controller
 
         $task->delete();
         return response()->json(['message' => 'Task deleted successfully']);
+    }
+
+    public function CompleteTask($id)
+    {
+        $user = Auth::user();
+        $task = Task::findOrfail($id);
+        if ($user->id !== $task->user_id) {
+            return response()->json(['message'=> 'Unauthorized'], 403);
+        }else{
+            $task->update(['status' => 'done']);
+            return response()->json(['message'=> 'task done'], 200);
+
+        }
     }
 }
