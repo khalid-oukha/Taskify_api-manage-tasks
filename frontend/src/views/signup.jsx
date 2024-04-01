@@ -27,7 +27,7 @@ export default function  Signup() {
     return (
         <div>
 
-            <div className="container">
+            <div className="logincontainer">
                 <div className="screen">
                     <div className="screen__content">
                         <form className="login" onSubmit={onSubmit}>
@@ -44,12 +44,12 @@ export default function  Signup() {
                                 <input ref={passwordRef} type="password" className="login__input" placeholder="Password"/>
                             </div>
                             <button className="button login__submit">
-                                <span className="button__text">Log In Now</span>
+                                <span className="button__text">Sign Up  Now</span>
                                 <i className="button__icon fas fa-chevron-right"></i>
                             </button>
                         </form>
                         <div className="social-login">
-                            <h3>log in via</h3>
+                        <h3> <a href="/login">Login !</a>  </h3>
                             <div className="social-icons">
                                 <a href="#" className="social-login__icon fab fa-instagram"></a>
                                 <a href="#" className="social-login__icon fab fa-facebook"></a>

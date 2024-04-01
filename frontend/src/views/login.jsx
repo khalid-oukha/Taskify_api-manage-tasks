@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import axiosFront from "../axios-front";
 import { useGlobalState } from "../context/ContextHelper";
+import '../Login.css';
 
 export default function Login() {
     const emailRef = useRef();
@@ -27,7 +28,7 @@ export default function Login() {
     return (
         <div>
 
-            <div className="container">
+            <div className="logincontainer">
                 <div className="screen">
                     <div className="screen__content">
                         <form className="login" onSubmit={onSubmit}>
@@ -45,7 +46,7 @@ export default function Login() {
                             </button>
                         </form>
                         <div className="social-login">
-                            <h3>log in via</h3>
+                            <h3> <a href="/signup">Register !</a>  </h3>
                             <div className="social-icons">
                                 <a href="#" className="social-login__icon fab fa-instagram"></a>
                                 <a href="#" className="social-login__icon fab fa-facebook"></a>
