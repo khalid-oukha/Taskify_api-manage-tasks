@@ -1,4 +1,6 @@
+import axios from "axios";
 import { createContext, useContext, useState } from "react";
+import axiosFront from "../axios-front";
 
 const StateContext = createContext(
     {
@@ -6,7 +8,6 @@ const StateContext = createContext(
         token: null,
         setUser: () => {},
         setToken: () => {},
-
     },
 );
 
