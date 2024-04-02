@@ -71,11 +71,14 @@ class UserTaskController extends Controller
         ]);
 
         $task = new TaskResource($task);
+        $tasks = $user->tasks;
         if ($task) {
             return response()->json([
                 'status' => 'success',
                 'message' => 'Task created successfully',
-                'task' => $task,
+                // 'task' => $task,
+                'tasks' => $tasks,
+
             ], 201);
         }
 
@@ -151,7 +154,12 @@ class UserTaskController extends Controller
 
         $this->authorize('update', $task);
         $task->update($request->validated());
-        return new TaskResource($task);
+        $tasks = $user->tasks;
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Task updated successfully',
+            'tasks' => $tasks,
+        ]);
     }
 
 
@@ -184,7 +192,11 @@ class UserTaskController extends Controller
         }
 
         $task->delete();
-        return response()->json(['message' => 'Task deleted successfully']);
+        $tasks = $user->tasks;
+        return response()->json([
+            'tasks' => $tasks,
+            'message' => 'Task deleted successfully'
+        ]);
     }
 
     public function CompleteTask($id)
@@ -195,7 +207,10 @@ class UserTaskController extends Controller
             return response()->json(['message'=> 'Unauthorized'], 403);
         }else{
             $task->update(['status' => 'done']);
-            return response()->json(['message'=> 'task done'], 200);
+            $tasks = $user->tasks;
+            return response()->json([
+                'tasks' => $tasks,
+                'message'=> 'task done'], 200);
 
         }
     }

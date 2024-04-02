@@ -1,17 +1,38 @@
-import React from 'react'
+import { Button, Label, Modal, Select, TextInput } from "flowbite-react";
+import { React, useState } from 'react';
 import logo from '../components/assets/images/logo.png'
 import { Navigate } from "react-router-dom";
 import axiosFront from "../axios-front";
-export default function Navbar() {
+
+export default function Navbar({setTesks}) {
+
     const token = localStorage.getItem('token');
     if (!token) {
         return <Navigate to='/login' />
     }
+
+    const [openModal, setOpenModal] = useState(false);
+
     const logout = () => {
         axiosFront.post('logout').then(() => {
             localStorage.removeItem('token');
             localStorage.removeItem('user');
             window.location.href = '/login';
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+
+    const createTask = (event) => {
+        event.preventDefault(); // Prevent default form submission
+
+        const taskName = event.target.name.value;
+        const taskStatus = event.target.status.value;
+
+        axiosFront.post('v1/usertask', { name: taskName, status: taskStatus }).then((res) => {
+            console.log('Task created');
+            setTesks(res.data.tasks);
+            setOpenModal(false); // Close the modal after task creation
         }).catch((error) => {
             console.log(error);
         });
@@ -47,11 +68,40 @@ export default function Navbar() {
                                         className="text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2"
                                     >Jobs</a
                                     >
-                                    <a
-                                        href="/add-job.html"
-                                        className="text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2"
-                                    >Add Job</a
-                                    >
+                                    <Button onClick={() => setOpenModal(true)}>Add new Task</Button>
+                                    <Modal show={openModal} size="md" onClose={() => setOpenModal(false)} popup>
+                                        <Modal.Header />
+                                        <Modal.Body>
+                                            <div className="text-center">
+                                                <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                                                    Are you sure you want to delete this product?
+                                                </h3>
+
+
+
+                                                <form onSubmit={createTask} className="flex max-w-md flex-col gap-4">
+                                                    <div>
+                                                        <div className="mb-2 block">
+                                                            <Label htmlFor="task" value="Task name" />
+                                                        </div>
+                                                        <TextInput id="name" name="name" type="text" placeholder="Task name" required />
+                                                    </div>
+                                                    <div>
+                                                        <div className="mb-2 block">
+                                                            <Label htmlFor="status" value="Select Task status" />
+                                                        </div>
+                                                        <Select id="status" name="status" required>
+                                                            <option value="to do">To Do</option>
+                                                            <option value="doing">Doing</option>
+                                                            <option value="done">Done</option>
+                                                        </Select>
+                                                    </div>
+                                                    <Button type="submit">Submit</Button>
+                                                </form>
+
+                                            </div>
+                                        </Modal.Body>
+                                    </Modal>
                                     <button className="text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2" onClick={logout}>Logout</button>
 
                                 </div>
