@@ -21,7 +21,6 @@ export default function Task({ task, setTasks }) {
   const deleteTask = () => {
     axiosFront.delete(`v1/usertask/${task.id}`)
       .then((res) => {
-        // If the deletion is successful, call the onDelete function
         setTasks(res.data.tasks);
       })
       .catch(error => {
@@ -30,7 +29,7 @@ export default function Task({ task, setTasks }) {
   };
 
   const editTask = () => {
-    event.preventDefault(); // Prevent default form submission
+    event.preventDefault();
 
     const taskName = event.target.name.value;
     const taskStatus = event.target.status.value;
@@ -38,7 +37,7 @@ export default function Task({ task, setTasks }) {
     axiosFront.put(`v1/usertask/${task.id}`, { name: taskName, status: taskStatus })
       .then((res) => {
         setTasks(res.data.tasks);
-        setOpenModal(false); // Close the modal after task creation
+        setOpenModal(false); 
       })
       .catch(error => {
         console.error('Error deleting task:', error);
@@ -56,6 +55,17 @@ export default function Task({ task, setTasks }) {
       });
   };
 
+  const makeIncomplete = () => {
+    axiosFront.put(`v1/incomplete/${task.id}`)
+      .then((res) => {
+        
+        setTasks(res.data.tasks);
+
+      })
+      .catch(error => {
+        console.error('Error making task incomplete:', error);
+      });
+  }
 
   return (
     <div className="bg-gray-100 p-6 rounded-lg shadow-md">
@@ -85,6 +95,14 @@ export default function Task({ task, setTasks }) {
               className="inline-block bg-green-500 text-white rounded-lg px-4 py-2 my-2 hover:bg-indigo-600"
             >
               Done
+            </button>
+          )}
+          {task.status == 'done' && (
+            <button
+              onClick={makeIncomplete}
+              className="inline-block bg-orange-500 text-white rounded-lg px-4 py-2 my-2 hover:bg-indigo-600"
+            >
+              incomplete
             </button>
           )}
         </div>

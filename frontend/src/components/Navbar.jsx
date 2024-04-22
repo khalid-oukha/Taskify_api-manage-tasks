@@ -24,7 +24,7 @@ export default function Navbar({setTesks}) {
     }
 
     const createTask = (event) => {
-        event.preventDefault(); // Prevent default form submission
+        event.preventDefault(); 
 
         const taskName = event.target.name.value;
         const taskStatus = event.target.status.value;

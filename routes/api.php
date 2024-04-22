@@ -36,5 +36,6 @@ Route::group(['prefix'=> 'v1', 'namespace' => 'App\Http\Controllers\API\V1'], fu
     Route::apiResource('task',TaskController::class);
     Route::apiResource('usertask', UserTaskController::class);
     Route::put('taskdone/{task}', [UserTaskController::class, 'CompleteTask']);
+    Route::put('incomplete/{task}', [UserTaskController::class, 'incompleteTask']);
 });
 

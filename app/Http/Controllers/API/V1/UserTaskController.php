@@ -214,4 +214,20 @@ class UserTaskController extends Controller
 
         }
     }
+
+    public function IncompleteTask($id)
+    {
+        $user = Auth::user();
+        $task = Task::findOrfail($id);
+        if ($user->id !== $task->user_id) {
+            return response()->json(['message'=> 'Unauthorized'], 403);
+        }else{
+            $task->update(['status' => 'to do']);
+            $tasks = $user->tasks;
+            return response()->json([
+                'tasks' => $tasks,
+                'message'=> 'task incomplete'], 200);
+
+        }
+    }
 }

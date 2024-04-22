@@ -21,11 +21,9 @@ export default function Dashboard() {
         <>
             <Navbar setTesks={setTesks} />
 
-            {/* <!-- Hero --> */}
             <Hero />
 
 
-            {/* <!-- Developers and Employers --> */}
             <Tasks  tasks = {tasks} setTasks={setTesks} />
 
         </>

@@ -2,12 +2,20 @@ import { useRef } from "react";
 import axiosFront from "../axios-front";
 import { useGlobalState } from "../context/ContextHelper";
 import '../Login.css';
+import { Navigate } from "react-router-dom";
 
 export default function Login() {
+
+
+    
     const emailRef = useRef();
     const passwordRef = useRef();
-    const {setToken,setUser} = useGlobalState();
+    const { setToken, setUser } = useGlobalState();
 
+    const token = localStorage.getItem('token');
+    if (token) {
+        return <Navigate to='/' />
+    }
     const onSubmit = async (e) => {
         e.preventDefault();
         const playload = {

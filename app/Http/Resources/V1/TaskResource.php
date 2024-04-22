@@ -18,8 +18,8 @@ class TaskResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'status' => $this->status,
-            
-            'createdAt' => $this->created_at,
+
+            'created' => $this->created_at,
             'userName' => $this->user->name,
         ];
     }
